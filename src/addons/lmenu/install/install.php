@@ -2,7 +2,7 @@
 
 namespace app\lmenu\install;
 
-class install
+class Install
 {
     /**
      * 开始执行

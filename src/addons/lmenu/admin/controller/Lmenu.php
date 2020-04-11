@@ -2,6 +2,9 @@
 
 namespace app\admin\controller;
 
+use think\facade\Db;
+use think\facade\View;
+
 use app\lmenu\lib\Menu;
 
 use app\admin\module\controller\AdminBase;
@@ -24,10 +27,10 @@ class Lmenu extends AdminBase
      */
     protected function initialize()
     {
-        parent::initialize();
-        
         // 设置当前模板路径
         $this->moduleViewPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR;
+        
+        parent::initialize();
     }
 
     /**
@@ -54,9 +57,9 @@ class Lmenu extends AdminBase
             }
         }
         
-        $this->assign('json', json_encode($json));
+        View::assign('json', json_encode($json));
         
-        return $this->fetch();
+        return View::fetch();
     }
 
     /**
