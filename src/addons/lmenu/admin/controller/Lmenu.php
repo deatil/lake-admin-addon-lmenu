@@ -7,7 +7,8 @@ use think\facade\View;
 
 use app\lmenu\lib\Menu;
 
-use app\admin\module\controller\AdminBase;
+use lake\module\controller\AdminBase;
+
 use app\admin\Model\AuthRule as AuthRuleModel;
 
 /**
@@ -86,7 +87,7 @@ class Lmenu extends AdminBase
             
         $result = Menu::toMenu($auth_rules);
 
-        return $this->success('请求成功', '', var_exports($result));
+        return $this->success('请求成功', '', lake_var_export($result));
     }
 
 }
