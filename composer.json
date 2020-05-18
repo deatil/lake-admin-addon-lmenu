@@ -1,6 +1,6 @@
 {
     "name": "lake/lake-admin-addon-lmenu",
-    "description": "The Lake-admin-addon-lmenu is for lake-admin Addon Package",
+    "description": "The Lake-admin-addon-lmenu is an addon package for lake-admin.",
     "license": "Apache-2.0",
     "type": "library",
     "keywords": [
