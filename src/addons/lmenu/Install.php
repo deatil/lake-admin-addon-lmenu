@@ -1,6 +1,6 @@
 <?php
 
-namespace app\lmenu\install;
+namespace app\lmenu;
 
 class Install
 {

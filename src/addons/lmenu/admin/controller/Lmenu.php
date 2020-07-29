@@ -58,9 +58,9 @@ class Lmenu extends AdminBase
             }
         }
         
-        $this->assign('json', json_encode($json));
+        View::assign('json', json_encode($json));
         
-        return $this->fetch();
+        return View::fetch();
     }
 
     /**

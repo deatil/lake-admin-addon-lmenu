@@ -10,7 +10,7 @@ return [
     // 模块作者[选填]
     'author' => 'deatil',
     // 作者地址[选填]
-    'authorsite' => 'github.com/deatil',
+    'authorsite' => 'http://github.com/deatil',
     // 作者邮箱[选填]
     'authoremail' => 'deatil@github.com',
     // 版本号，请不要带除数字外的其他字符[必填]

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\lmenu\uninstall;
+namespace app\lmenu;
 
 class Uninstall
 {
