@@ -2,7 +2,7 @@
 return [
     [
         "route" => "admin/lmenu/index",
-        "type" => 2,
+        "type" => 1,
         "is_menu" => 1,
         "title" => "菜单结构",
         "icon" => "icon-other",
@@ -11,7 +11,7 @@ return [
         "child" => [
             [
                 "route" => "admin/lmenu/index",
-                "type" => 2,
+                "type" => 1,
                 "is_menu" => 1,
                 "title" => "菜单列表",
                 "icon" => "icon-neirongguanli",
