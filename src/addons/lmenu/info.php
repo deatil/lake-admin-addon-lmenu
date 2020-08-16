@@ -32,8 +32,8 @@ return [
     // 菜单
     'menus' => include __DIR__ . '/menu.php',
     
-    // 嵌入点
-    'hooks' => [],
+    // 事件
+    'event' => [],
     
     // 数据表，请加表前缀pre__[有数据库表时必填]
     'tables' => [],
