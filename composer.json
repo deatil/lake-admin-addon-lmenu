@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\lmenu\\": "src/addons/lmenu"
+            "app\\lmenu\\": "src/addon/lmenu"
         },
         "files": [
         ]
