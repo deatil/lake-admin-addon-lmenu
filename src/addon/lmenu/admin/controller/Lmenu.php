@@ -5,11 +5,10 @@ namespace app\admin\controller;
 use think\facade\Db;
 use think\facade\View;
 
-use app\lmenu\lib\Menu;
-
 use lake\module\controller\AdminBase;
 
-use app\admin\Model\AuthRule as AuthRuleModel;
+use lake\admin\Model\AuthRule as AuthRuleModel;
+use app\lmenu\lib\Menu;
 
 /**
  * 后台菜单增强

@@ -1,7 +1,7 @@
-### 菜单结构插件
+## 菜单结构插件
 
 
-## 项目介绍
+### 项目介绍
 
 *  基于lake-admin的菜单结构插件，提取后台菜单分级结构格式
 
@@ -17,7 +17,7 @@
 *  该系统所属版权归 deatil(https://github.com/deatil) 所有。
 
 
-## 使用方法 
+### 使用方法 
 
 *  正确安装了lake-admin后台
 *  composer require lake/lake-admin-addon-lmenu，然后选择最新版本
