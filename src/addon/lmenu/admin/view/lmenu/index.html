@@ -6,22 +6,25 @@
     <div class="layui-card-body">
         <form class="layui-form form-horizontal" action="{:url('format')}" method="post">
             <input type="hidden" name="rules" value="" />
-			
+            
             <div class="layui-form-item">
                 <label class="layui-form-label">菜单</label>
                 <div class="layui-input-block">
-					<div class="lake-admin-auth-manager-access left">
-						<ul class="ztree" style="margin-left: 5px;margin-top:5px; padding: 0;">
-							<li><a title="全部展开、折叠 "><span class="button ico_open"></span><span id="ztree_expandAll" data-open="false">全部展开、折叠 </span></a> </li>
-						</ul>
-						<ul id="menuTree" class="ztree"></ul>
-					</div>		
+                    <div class="lake-admin-auth-manager-access left">
+                        <div style="margin-left: 5px;margin-top:5px; padding: 0;">
+                            <a href="javascript:;" title="全部展开、折叠 ">
+                                <span class="button ico_open"></span>
+                                <span id="expandAll" data-open="true">全部展开、折叠 </span>
+                            </a> 
+                        </div>
+                        <div id="menuTree"></div>
+                    </div>
                 </div>
             </div>
-			
-			<div class="layui-form-item">
+            
+            <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn ajax-post" lay-submit="" lay-filter="*" target-form="form-horizontal">查看配置</button>
+                    <a href="javascript:;" class="layui-btn ajax-post" lay-submit="" lay-filter="*" target-form="form-horizontal">查看配置</a>
                 </div>
             </div>
         </form>
@@ -32,65 +35,48 @@
 {block name="layui"}{/block}
 
 {block name="script"}
-<link rel="stylesheet" href="admin/libs/zTree/metroStyle.css">
 <script>
 layui.config({
     base: "admin/libs/layui-extend/"
-}).use(['jquery', 'ztree'], function() {
+}).use(['jquery', 'tree', 'utils'], function() {
     var $ = layui.$;
-    //配置
-    var setting = {
-        //设置 zTree 的节点上是否显示 checkbox / radio
-        check: {
-            enable: true,
-            chkboxType: { "Y": "ps", "N": "ps" }
-        },
-        data: {
-            simpleData: {
-                enable: true,
-                idKey: "nid",
-                pIdKey: "parentid",
-            }
-        },
-        callback: {
-            beforeClick: function(treeId, treeNode) {
-                if (treeNode.isParent) {
-                    zTree.expandNode(treeNode);
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-            onClick: function(event, treeId, treeNode) {
-                //栏目ID
-                var catid = treeNode.catid;
-            }
+    var tree = layui.tree;
+    var utils = layui.utils;
+    var getLayuiTreeCheckedIds = utils.getLayuiTreeCheckedIds;
+    
+    // 节点数据
+    var data = {:json_encode($json)};
+    
+    tree.render({
+        elem: '#menuTree',
+        data: data,
+        showCheckbox: true,  //是否显示复选框,
+        id: 'menuTreeId',
+        isJump: false,
+        click: function(obj){
         }
-    };
-    //节点数据
-    var zNodes = {$json|raw};
-    //zTree对象
-    var zTree = null;
-    $(document).ready(function() {
-        $.fn.zTree.init($("#menuTree"), setting, zNodes);
-        zTree = $.fn.zTree.getZTreeObj("menuTree");
-        zTree.expandAll(true);
-        $("#ztree_expandAll").click(function() {
-            if ($(this).data("open")) {
-                zTree.expandAll(false);
-                $(this).data("open", false);
-            } else {
-                zTree.expandAll(true);
-                $(this).data("open", true);
-            }
-        });
+    });
+    
+    $("#expandAll").click(function() {
+        if ($(this).data("open")) {
+            $('.layui-tree-setHide').find('.layui-tree-iconClick').trigger('click');
+            $(this).data("open", false);
+        } else {
+            $('.layui-tree-spread').find('.layui-tree-iconClick').trigger('click');
+            $(this).data("open", true);
+        }
     });
 
-    layui.use(['layer', 'form'], function() {
+    layui.use(['layer', 'form', 'utils'], function() {
         var layer = layui.layer,
-            form = layui.form;
+            form = layui.form,
+            utils = layui.utils;
+            
         //通用表单post提交
         $('.ajax-post').on('click', function(e) {
+            e.preventDefault;
+            e.stopPropagation();
+        
             var target, query, _form;
             var target_form = $(this).attr('target-form');
             var that = this;
@@ -99,21 +85,12 @@ layui.config({
             _form = $('.' + target_form);
             //处理被选中的数据
             _form.find('input[name="rules"]').val("");
-            var nodes = zTree.getCheckedNodes(true);
-            var str = "";
-            $.each(nodes, function(i, value) {
-                if (str != "") {
-                    str += ",";
-                }
-                str += value.id;
-            });
+            
+            var checkedData = tree.getChecked('menuTreeId'); //获取选中节点的数据
+            var str = getLayuiTreeCheckedIds(checkedData);
+            
             _form.find('input[name="rules"]').val(str);
 
-            if ($(this).hasClass('confirm')) {
-                if (!confirm('确认要执行该操作吗?')) {
-                    return false;
-                }
-            }
             if ($(this).attr('url') !== undefined) {
                 target = $(this).attr('url');
             } else {
@@ -122,32 +99,32 @@ layui.config({
             query = _form.serialize();
 
             $.post(target, query).success(function(data) {
-				var tpl = '\
-				<div class="layui-card">\
-					<div class="layui-card-body">\
-						<div class="layui-form-item">\
-							<div class="layui-form-field-label">\
-								<textarea name="menus" style="height: 350px;" class="layui-textarea">[MENUS]</textarea>\
-							</div>\
-						</div>\
-					</div>\
-				</div>\
-				';
-				
-				if (data.code == 1) {
-					tpl = tpl.replace(/\[MENUS\]/, data.data);
-					layer.open({ 
-						type: 1, 
-						title: '菜单配置', 
-						content: tpl, 
-						area: ['100%', '100%'], 
-					});
-				} else {
-					layer.alert(data.msg);
-				}
-			
+                var tpl = '\
+                <div class="layui-card">\
+                    <div class="layui-card-body">\
+                        <div class="layui-form-item">\
+                            <div class="layui-form-field-label">\
+                                <textarea name="menus" style="height: 350px;" class="layui-textarea">[MENUS]</textarea>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+                ';
+                
+                if (data.code == 1) {
+                    tpl = tpl.replace(/\[MENUS\]/, data.data);
+                    layer.open({ 
+                        type: 1, 
+                        title: '菜单配置', 
+                        content: tpl, 
+                        area: ['100%', '100%'], 
+                    });
+                } else {
+                    layer.alert(data.msg);
+                }
+                
+                return false;
             });
-            return false;
         });
     });
 });

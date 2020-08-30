@@ -2,12 +2,15 @@
 
 namespace app\admin\controller;
 
-use think\facade\Db;
 use think\facade\View;
+
+use lake\TTree;
 
 use lake\module\controller\AdminBase;
 
 use lake\admin\Model\AuthRule as AuthRuleModel;
+use lake\admin\service\AuthRule as AuthRuleService;
+
 use app\lmenu\lib\Menu;
 
 /**
@@ -41,23 +44,24 @@ class Lmenu extends AdminBase
      */
     public function index()
     {
-        $result = (new AuthRuleModel())->returnNodes(false);
+        $result = (new AuthRuleService())->returnNodes(false);
         
         $json = [];
         if (!empty($result)) {
             foreach ($result as $rs) {
                 $data = [
-                    'nid' => $rs['id'],
-                    'parentid' => $rs['parentid'],
-                    'name' => $rs['title'],
                     'id' => $rs['id'],
-                    'checked' => false,
+                    'parentid' => $rs['parentid'],
+                    'title' => $rs['title'],
+                    'spread' => false,
                 ];
                 $json[] = $data;
             }
         }
         
-        View::assign('json', json_encode($json));
+        $json = (new TTree)->withConfig('buildChildKey', 'children')->withData($json)->buildArray(0);
+        
+        View::assign('json', $json);
         
         return View::fetch();
     }
