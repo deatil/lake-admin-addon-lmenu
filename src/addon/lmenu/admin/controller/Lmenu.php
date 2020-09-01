@@ -4,12 +4,12 @@ namespace app\admin\controller;
 
 use think\facade\View;
 
-use lake\TTree;
+use Lake\TTree;
 
-use lake\module\controller\AdminBase;
+use Lake\Module\Controller\AdminBase;
 
-use lake\admin\Model\AuthRule as AuthRuleModel;
-use lake\admin\service\AuthRule as AuthRuleService;
+use Lake\Admin\Model\AuthRule as AuthRuleModel;
+use Lake\Admin\Service\AuthRule as AuthRuleService;
 
 use app\lmenu\lib\Menu;
 
@@ -31,7 +31,7 @@ class Lmenu extends AdminBase
     protected function initialize()
     {
         // 设置当前模板路径
-        $this->moduleViewPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR;
+        $this->viewPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR;
         
         parent::initialize();
     }
