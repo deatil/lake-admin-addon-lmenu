@@ -10,7 +10,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">菜单</label>
                 <div class="layui-input-block">
-                    <div class="lake-admin-auth-manager-access left">
+                    <div class="lake-admin-lmenu-access left">
                         <div style="margin-left: 5px;margin-top:5px; padding: 0;">
                             <a href="javascript:;" title="全部展开、折叠 ">
                                 <span class="button ico_open"></span>
@@ -35,6 +35,15 @@
 {block name="layui"}{/block}
 
 {block name="script"}
+<style>
+.lake-admin-lmenu-access {
+    border: 1px solid #D2D2D2;
+    border-radius: 2px;
+    padding: 5px 0 15px 3px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+</style>
 <script>
 layui.config({
     base: "admin/libs/layui-extend/"
@@ -42,7 +51,6 @@ layui.config({
     var $ = layui.$;
     var tree = layui.tree;
     var utils = layui.utils;
-    var getLayuiTreeCheckedIds = utils.getLayuiTreeCheckedIds;
     
     // 节点数据
     var data = {:json_encode($json)};
@@ -67,64 +75,58 @@ layui.config({
         }
     });
 
-    layui.use(['layer', 'form', 'utils'], function() {
-        var layer = layui.layer,
-            form = layui.form,
-            utils = layui.utils;
-            
-        //通用表单post提交
-        $('.ajax-post').on('click', function(e) {
-            e.preventDefault;
-            e.stopPropagation();
+    //通用表单post提交
+    $('.ajax-post').on('click', function(e) {
+        e.preventDefault;
+        e.stopPropagation();
+    
+        var target, query, _form;
+        var target_form = $(this).attr('target-form');
+        var that = this;
+        var nead_confirm = false;
+
+        _form = $('.' + target_form);
+        //处理被选中的数据
+        _form.find('input[name="rules"]').val("");
         
-            var target, query, _form;
-            var target_form = $(this).attr('target-form');
-            var that = this;
-            var nead_confirm = false;
+        var checkedData = tree.getChecked('menuTreeId'); //获取选中节点的数据
+        var str = utils.getLayuiTreeCheckedIds(checkedData);
+        
+        _form.find('input[name="rules"]').val(str);
 
-            _form = $('.' + target_form);
-            //处理被选中的数据
-            _form.find('input[name="rules"]').val("");
-            
-            var checkedData = tree.getChecked('menuTreeId'); //获取选中节点的数据
-            var str = getLayuiTreeCheckedIds(checkedData);
-            
-            _form.find('input[name="rules"]').val(str);
+        if ($(this).attr('url') !== undefined) {
+            target = $(this).attr('url');
+        } else {
+            target = _form.attr("action");
+        }
+        query = _form.serialize();
 
-            if ($(this).attr('url') !== undefined) {
-                target = $(this).attr('url');
-            } else {
-                target = _form.attr("action");
-            }
-            query = _form.serialize();
-
-            $.post(target, query).success(function(data) {
-                var tpl = '\
-                <div class="layui-card">\
-                    <div class="layui-card-body">\
-                        <div class="layui-form-item">\
-                            <div class="layui-form-field-label">\
-                                <textarea name="menus" style="height: 350px;" class="layui-textarea">[MENUS]</textarea>\
-                            </div>\
+        $.post(target, query).success(function(data) {
+            var tpl = '\
+            <div class="layui-card">\
+                <div class="layui-card-body">\
+                    <div class="layui-form-item">\
+                        <div class="layui-form-field-label">\
+                            <textarea name="menus" style="height: 350px;" class="layui-textarea">[MENUS]</textarea>\
                         </div>\
                     </div>\
                 </div>\
-                ';
-                
-                if (data.code == 1) {
-                    tpl = tpl.replace(/\[MENUS\]/, data.data);
-                    layer.open({ 
-                        type: 1, 
-                        title: '菜单配置', 
-                        content: tpl, 
-                        area: ['100%', '100%'], 
-                    });
-                } else {
-                    layer.alert(data.msg);
-                }
-                
-                return false;
-            });
+            </div>\
+            ';
+            
+            if (data.code == 1) {
+                tpl = tpl.replace(/\[MENUS\]/, data.data);
+                layer.open({ 
+                    type: 1, 
+                    title: '菜单配置', 
+                    content: tpl, 
+                    area: ['100%', '100%'], 
+                });
+            } else {
+                layer.alert(data.msg);
+            }
+            
+            return false;
         });
     });
 });
