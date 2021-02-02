@@ -17,8 +17,6 @@ return [
     'version' => '2.0.6',
     // 适配最低lake版本[必填]
     'adaptation' => '2.0.2',
-    // 签名[必填]
-    'sign' => '11ce918dc37f8b40e45ab91f40aec6e6',
     
     // 模块地址，插件自定义包时填写
     'path' => __DIR__,
@@ -34,9 +32,6 @@ return [
     
     // 事件
     'event' => [],
-    
-    // 数据表
-    'tables' => [],
     
     // 演示数据文件
     'demo' => 0,
