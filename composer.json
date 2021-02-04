@@ -10,7 +10,7 @@
         "addon",
         "lmenu"
     ],
-    "homepage": "https://github.com/deatil",
+    "homepage": "https://github.com/deatil/lake-admin-addon-lmenu",
     "authors": [
         {
             "name": "deatil",
@@ -24,15 +24,13 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\lmenu\\": "src/addon/lmenu"
-        },
-        "files": [
-        ]
+            "app\\lmenu\\": ""
+        }
     },
     "extra": {
         "think":{
             "services":[
-                "app\\lmenu\\boot\\Service"
+                "app\\lmenu\\Service"
             ]
         }
     }
